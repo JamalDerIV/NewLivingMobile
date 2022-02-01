@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NewLiving</string>
+
+    <string name="sortieren">Auswählen</string>
 </resources>
