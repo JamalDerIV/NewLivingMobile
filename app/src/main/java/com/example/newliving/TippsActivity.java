@@ -57,12 +57,6 @@ public class TippsActivity extends AppCompatActivity {
         tippsRequest.execute();
 
 
-
-
-
-
-
-
         ImageView backIcon = findViewById(R.id.back_icon);
         backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +169,7 @@ public class TippsActivity extends AppCompatActivity {
 
                 names = profiles.getJSONObject(i);
 
-                String name = names.getString("name");      //TODO: ganze funktion überprüfen
+                String name = names.getString("name");
                 String content = names.getString("text");
 
                 textname.add(name);

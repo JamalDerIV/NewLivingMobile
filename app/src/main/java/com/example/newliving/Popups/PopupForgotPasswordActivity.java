@@ -31,7 +31,6 @@ public class PopupForgotPasswordActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             cookie = extras.getString("Cookie");
-            System.out.println(cookie);
         }
 
         DisplayMetrics dm = new DisplayMetrics();

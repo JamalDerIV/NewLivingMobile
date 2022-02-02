@@ -26,14 +26,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="280dp"
             android:layout_marginTop="16dp"
-            android:text="Ändern"/>
+            android:hint="Name"/>
+
 
         <EditText
             android:id="@+id/editTextEMail"

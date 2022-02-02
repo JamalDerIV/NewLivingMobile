@@ -7,11 +7,15 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="NewLiving"
+        android:label="New Living"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NewLiving"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".PopupFriendsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CustomTheme" />
         <activity
             android:name=".ServiceActivity"
             android:exported="false" />

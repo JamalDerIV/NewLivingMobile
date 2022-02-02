@@ -1,10 +1,8 @@
 package com.example.newliving;
 
-import java.util.Date;
-
 public class ItemModel {
 
-    String name,textUmzugsplan,date,text,textName,address,nameCompany,type,priceKM,priceHour,fullPrice,deposit;
+    String name,date,text,textName,address,nameCompany,type,priceKM,priceHour,fullPrice,deposit,helperName;
     int id;
     Boolean done,predetermined;
 
@@ -24,14 +22,6 @@ public class ItemModel {
 
     public String getText() {
         return text;
-    }
-
-    public String getTextUmzugsplan() {
-        return textUmzugsplan;
-    }
-
-    public void setTextUmzugsplan(String textUmzugsplan) {
-        this.textUmzugsplan = textUmzugsplan;
     }
 
     public Boolean getPredetermined() {
@@ -64,6 +54,14 @@ public class ItemModel {
 
     public void setNameCompany(String nameCompany) {
         this.nameCompany = nameCompany;
+    }
+
+    public String getHelperName() {
+        return helperName;
+    }
+
+    public void setHelperName(String helperName) {
+        this.helperName = helperName;
     }
 
     public String getDeposit() {

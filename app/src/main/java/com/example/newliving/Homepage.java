@@ -25,8 +25,10 @@ import com.example.newliving.Popups.PopupNewItemActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.time.temporal.ValueRange;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -36,14 +38,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Homepage extends AppCompatActivity {
-    public String cookie;
-    public String responseData;
+    String cookie;
+    String responseData;
     ListView viewChecklist;
 
 
 
 
     static ArrayList<ItemModel> itemModelArrayList = new ArrayList<>();
+    static ArrayList<ItemModel> itemModelHelperArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,12 +159,10 @@ public class Homepage extends AppCompatActivity {
     class CustomAdapter extends BaseAdapter {
         Context context;
         ArrayList<ItemModel> arrayList;
-        String response;
 
-        public CustomAdapter(Context context, ArrayList<ItemModel> arrayList,String responses) {
+        public CustomAdapter(Context context, ArrayList<ItemModel> arrayList) {
             this.context = context;
             this.arrayList = arrayList;
-            this.response = responses;
         }
 
         @Override
@@ -191,9 +192,37 @@ public class Homepage extends AppCompatActivity {
             EditText editText = (EditText) convertView.findViewById(R.id.textList);
             CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox) ;
             ImageView delObject = (ImageView) convertView.findViewById(R.id.delButton);
+            EditText editTextDate = (EditText) convertView.findViewById(R.id.editTextDate);
+            Button helperName = (Button) convertView.findViewById(R.id.helper);
 
-            editText.setText(itemModelArrayList.get(position).getName());
-            checkBox.setChecked(itemModelArrayList.get(position).getDone());
+
+
+            //helperName.setText(itemModelHelperArrayList.get(position).getHelperName());
+
+            editText.setText(arrayList.get(position).getName());
+            checkBox.setChecked(arrayList.get(position).getDone());
+            if(arrayList.get(position).getDate().equals("null")){
+                editTextDate.setHint("Kein Datum festgelegt");
+            }else{
+                editTextDate.setText(arrayList.get(position).getDate());
+            }
+
+            editTextDate.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    itemModelArrayList.get(position).setDate(editTextDate.getText().toString());
+                }
+            });
 
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -212,8 +241,7 @@ public class Homepage extends AppCompatActivity {
                 }
             });
 
-
-            if(!itemModelArrayList.get(position).getPredetermined()){
+            if(!arrayList.get(position).getPredetermined()){
 
                 delObject.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -232,13 +260,24 @@ public class Homepage extends AppCompatActivity {
             }else{
                 delObject.setVisibility(View.INVISIBLE);
                 editText.setFocusable(false);
+                editTextDate.setFocusable(false);
             }
 
+            helperName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Homepage.this, PopupFriendsActivity.class);
+                    intent.putExtra("Cookie", cookie);
+                    intent.putExtra("ID", arrayList.get(position).getId());
+                    startActivity(intent);
+                }
+            });
 
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int number = itemModelArrayList.get(position).getId();
+                    int checkBoxID = arrayList.get(position).getId();
+                    checkboxUpdate(String.valueOf(checkBoxID));
                 }
             });
 
@@ -246,6 +285,7 @@ public class Homepage extends AppCompatActivity {
         }
 
     }
+
 
     private void createList(String response) {
         JSONArray objectsArray = null;
@@ -257,7 +297,6 @@ public class Homepage extends AppCompatActivity {
 
             JSONObject objects = null;
 
-            itemModelArrayList.clear();
 
             ArrayList<String> textList = new ArrayList<>();
             ArrayList<Integer> iD = new ArrayList<>();
@@ -286,17 +325,13 @@ public class Homepage extends AppCompatActivity {
                 date.add(time);
                 checkbox.add(checked);
                 predetermined.add(notDeleteable);
-
             }
 
-
-            textListArray =textList.toArray(new String[textList.size()]);
+            textListArray = textList.toArray(new String[textList.size()]);
             iDArray = iD.toArray(new Integer[iD.size()]);
             dateArray = date.toArray(new String[date.size()]);
             checkboxArray = checkbox.toArray(new Boolean[checkbox.size()]);
             predeterminedArray = predetermined.toArray(new Boolean[predetermined.size()]);
-
-
 
             for (int i = 0; i < textListArray.length; i++) {
                 ItemModel itemModel = new ItemModel();
@@ -306,6 +341,10 @@ public class Homepage extends AppCompatActivity {
                 itemModel.setDone(checkboxArray[i]);
                 itemModel.setPredetermined(predeterminedArray[i]);
                 itemModelArrayList.add(itemModel);
+
+                ItemModel itemModelHelper = new ItemModel();
+                itemModelHelper.setHelperName("");
+                itemModelHelperArrayList.add(itemModelHelper);
             }
 
 
@@ -313,6 +352,13 @@ public class Homepage extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+
+
+    public void checkboxUpdate(String data){
+        CheckboxUpdateRequest checkboxUpdateRequest = new CheckboxUpdateRequest();
+        checkboxUpdateRequest.execute(data);
     }
 
     public class LoadRequest extends AsyncTask<String, String, String> {
@@ -341,12 +387,13 @@ public class Homepage extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String responseData) {
+            itemModelArrayList.clear();
             createList(responseData);
+
             viewChecklist = (ListView) findViewById(R.id.inputList);
-            CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(),itemModelArrayList,responseData);
+            CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(),itemModelArrayList);
 
             viewChecklist.setAdapter(customAdapter);
-
         }
 
     }
@@ -360,7 +407,7 @@ public class Homepage extends AppCompatActivity {
             MediaType mediaType = MediaType.parse("text/plain");
             RequestBody body = RequestBody.create(mediaType, "");
             Request request = new Request.Builder()
-                    .url("http://10.0.2.2:8080/api/eintrag/löschen?id="+legend[0]) //TODO: umzugsplan item löschen
+                    .url("http://10.0.2.2:8080/api/eintrag/löschen?id="+legend[0])
                     .method("DELETE", body)
                     .addHeader("Cookie", cookie)
                     .build();
@@ -424,6 +471,7 @@ public class Homepage extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String data) {
+            itemModelArrayList.clear();
             LoadRequest loadProfiles = new LoadRequest();
             loadProfiles.execute();
 
@@ -431,5 +479,26 @@ public class Homepage extends AppCompatActivity {
 
     }
 
+    public class CheckboxUpdateRequest extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String[] legend) {
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:8080/api/eintrag/erledigt?id="+legend[0])
+                    .method("GET", null)
+                    .addHeader("Cookie", cookie)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+    }
 
 }
