@@ -50,7 +50,6 @@ public class TippsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             cookie = extras.getString("Cookie");
-            System.out.println(cookie);
         }
 
         TippsRequest tippsRequest = new TippsRequest();
@@ -65,8 +64,6 @@ public class TippsActivity extends AppCompatActivity {
             }
         });
 
-        TextView title = findViewById(R.id.toolbar_title);
-        title.setText("Tipps");
 
         ImageView profileIcon = findViewById(R.id.profile_icon);
         profileIcon.setOnClickListener(new View.OnClickListener() {

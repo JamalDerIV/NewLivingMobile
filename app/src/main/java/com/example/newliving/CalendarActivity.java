@@ -22,9 +22,6 @@ public class CalendarActivity extends AppCompatActivity {
             System.out.println(cookie);
         }
 
-        TextView title = findViewById(R.id.toolbar_title);
-        title.setText("Kalender");
-
 
         ImageView backIcon = findViewById(R.id.back_icon);
         backIcon.setOnClickListener(new View.OnClickListener() {

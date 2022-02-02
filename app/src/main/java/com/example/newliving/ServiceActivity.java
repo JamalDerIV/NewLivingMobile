@@ -60,11 +60,9 @@ public class ServiceActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             cookie = extras.getString("Cookie");
-            System.out.println(cookie);
         }
 
-        TextView title = findViewById(R.id.toolbar_title);
-        title.setText("Dienstleistungen");
+
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         RadioButton radioButtonA = findViewById(R.id.radioAnhaenger);

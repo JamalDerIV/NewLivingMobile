@@ -46,7 +46,6 @@ public class SettingsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             cookie = extras.getString("Cookie");
-            System.out.println(cookie);
         }
 
         settingsName = findViewById(R.id.settingsName);
@@ -172,6 +171,18 @@ public class SettingsActivity extends AppCompatActivity {
                 LogoutRequest logoutRequest = new LogoutRequest();
                 logoutRequest.execute();
 
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        Button deleteAccount = findViewById(R.id.buttonDeleteAccount);
+        deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest();
+                deleteAccountRequest.execute();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -311,6 +322,29 @@ public class SettingsActivity extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url("http://10.0.2.2:8080/api/link/deaktivieren")
                     .method("GET", null)
+                    .addHeader("Cookie", cookie)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
+    public class DeleteAccountRequest extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] legend) {
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = RequestBody.create(mediaType, "");
+            Request request = new Request.Builder()
+                    .url("http://10.0.2.2:8080/api/account/löschen")
+                    .method("DELETE", body)
                     .addHeader("Cookie", cookie)
                     .build();
             try {

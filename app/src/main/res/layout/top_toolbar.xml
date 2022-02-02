@@ -15,15 +15,12 @@
             android:id="@+id/back_icon"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_baseline_arrow_back_24"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar_title"
-            android:textColor="@android:color/black"
-            android:layout_centerVertical="true"
+        <ImageView
+            android:layout_width="133dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:textSize="20sp"
-            android:text="TODO"/>
+            android:src="@drawable/logo" />
 
         <ImageView
             android:id="@+id/profile_icon"

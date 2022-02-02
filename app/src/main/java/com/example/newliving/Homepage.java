@@ -56,11 +56,8 @@ public class Homepage extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             cookie = extras.getString("Cookie");
-            System.out.println(cookie);
         }
 
-        TextView title = findViewById(R.id.toolbar_title);
-        title.setText("Umzugsplan");
 
         LoadRequest loadRequest = new LoadRequest();
         loadRequest.execute();
