@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
             MediaType mediaType = MediaType.parse("application/json");
-            //RequestBody body = RequestBody.create(mediaType, "{\r\n    \"email\": \"maxmuster@gmail.com\",\r\n    \"passwort\": \"abc\"\r\n}");
             RequestBody body = RequestBody.create(mediaType, "{\r\n    \"email\": \""+legend[0]+"\",\r\n    \"passwort\": \""+legend[1]+"\"\r\n}");
             Request request = new okhttp3.Request.Builder()
                     .url("http://10.0.2.2:8080/api/login")
