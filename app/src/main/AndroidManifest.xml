@@ -13,7 +13,7 @@
         android:theme="@style/Theme.NewLiving"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".PopupFriendsActivity"
+            android:name=".Popups.PopupFriendsActivity"
             android:exported="false"
             android:theme="@style/Theme.CustomTheme" />
         <activity

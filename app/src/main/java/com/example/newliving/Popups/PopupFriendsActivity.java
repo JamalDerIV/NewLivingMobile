@@ -1,4 +1,4 @@
-package com.example.newliving;
+package com.example.newliving.Popups;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.newliving.Popups.PopupNewItemActivity;
+import com.example.newliving.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
